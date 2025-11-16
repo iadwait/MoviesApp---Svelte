@@ -9,6 +9,11 @@
     const API_KEY = "";
     const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
     let loading = true;
+    let searchQuery = '';
+    // movies is your fetched array from TMDb
+    $: filteredMovies = movies.filter(movie =>
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const unsubscribe = user.subscribe((value) => {
         currentUser = value;
@@ -41,8 +46,13 @@
 {#if loading}
     <p>Loading movies...</p>
 {:else}
+    <input
+        type="text"
+        placeholder="Search movies..."
+        bind:value={searchQuery}
+    />
     <div class="movies-grid">
-        {#each movies as movie}
+        {#each filteredMovies as movie}
             <MovieCard {movie} />
         {/each}
     </div>
