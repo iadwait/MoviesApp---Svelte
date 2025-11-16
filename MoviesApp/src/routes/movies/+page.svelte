@@ -2,10 +2,11 @@
     import { user } from "$lib/stores/userStore";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
+    import MovieCard from "$lib/components/MovieCard.svelte";
 
     let currentUser;
     let movies = [];
-    const API_KEY = "ADD YOUR's API KEY";
+    const API_KEY = "";
     const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
     let loading = true;
 
@@ -40,9 +41,17 @@
 {#if loading}
     <p>Loading movies...</p>
 {:else}
-    <ul>
+    <div class="movies-grid">
         {#each movies as movie}
-            <li>{movie.title}</li>
+            <MovieCard {movie} />
         {/each}
-    </ul>
+    </div>
 {/if}
+
+<style>
+    .movies-grid {
+        display: flex;
+        flex-wrap: wrap;
+        /* background-color: red; */
+    }
+</style>
