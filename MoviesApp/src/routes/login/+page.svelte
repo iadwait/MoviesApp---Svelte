@@ -4,25 +4,20 @@
 
     let email = '';
     let password = '';
+    let error = '';
 
     function loginUser() {
     const users = JSON.parse(localStorage.getItem('users')) || [];
     console.log('users', users);
 
-    const validUser = users.find(u => u.email === email && u.password === password);
+    const existingUser = users.find(u => u.email === email && u.password === password);
 
-    if (!validUser) {
-      alert("Invalid email or password!");
-      return;
+    if (existingUser) {
+      user.set(existingUser); // Update store
+      goto('/movies'); // Redirect to movies
+    } else {
+      error = 'Invalid email or password';
     }
-
-    // Store user to Svelte store
-    user.set(validUser);
-
-    // Persist user so refresh doesn't log out
-    localStorage.setItem("loggedInUser", JSON.stringify(validUser));
-
-    goto('/movies'); // redirect
   }
 
 </script>
@@ -34,3 +29,4 @@
     <input type='password' placeholder="Password" bind:value={password} />
     <button type="submit">Login</button>
 </form>
+<p style="color:red">{error}</p>

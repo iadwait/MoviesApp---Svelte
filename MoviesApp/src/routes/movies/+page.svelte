@@ -12,7 +12,10 @@
     onMount(() => {
         if (!currentUser) {
         goto('/login'); // block access if not logged in
-        }
+    }
+
+    // Reactive redirect if not logged in
+    // $: if (!$user) goto('/login');
   });
 
 </script>

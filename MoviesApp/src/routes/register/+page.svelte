@@ -1,9 +1,11 @@
 <script>
     import { goto } from "$app/navigation";
+    import { user } from '$lib/stores/userStore';
 
     let name = '';
     let email = '';
     let password = '';
+    let error = '';
 
     function registerUser() {
         // Get existing users or empty array
@@ -12,13 +14,18 @@
         // Check if email already exists
         const exists = users.find(u => u.email === email);
         if (exists) {
-            alert("User already exists!");
+            error = 'Email already registered';
+            //alert("User already exists!");
             return;
         }
 
+        const newUser = { name, email, password };
         // Save new user
-        users.push({ name, email, password });
+        users.push(newUser);
         localStorage.setItem('users', JSON.stringify(users));
+
+        // Save in store
+        user.set(newUser);
 
         alert("Registration successful!");
 
@@ -35,3 +42,4 @@
     <input type='password' placeholder="Password" bind:value={password} />
     <button type="submit">Register</button>
 </form>
+<p style="color:red">{error}</p>
