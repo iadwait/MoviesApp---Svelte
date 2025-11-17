@@ -1,8 +1,10 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     export let movie;
+    const dispatch = createEventDispatcher();
 </script>
 
-<div class="movie-card">
+<div class="movie-card" on:click={() => dispatch('click')}>
     <img src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} alt={movie.title} />
     <h3>{movie.title}</h3>
     <p>⭐ {movie.vote_average}</p>

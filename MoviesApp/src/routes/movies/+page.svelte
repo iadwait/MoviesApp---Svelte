@@ -3,6 +3,7 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import MovieCard from "$lib/components/MovieCard.svelte";
+    import MovieModal from "$lib/components/MovieModal.svelte";
 
     let currentUser;
     let movies = [];
@@ -11,6 +12,8 @@
     let loading = true;
     let searchQuery = "";
     let page = 1;
+    let showModal = false;
+    let selectedMovie = null;
     // movies is your fetched array from TMDb
     $: filteredMovies = movies.filter((movie) =>
         movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -61,6 +64,15 @@
             }
         }
     }
+
+    function openModal(movie) {
+        selectedMovie = movie;
+        showModal = true;
+    }
+
+    function closeModal() {
+        showModal = false;
+    }
 </script>
 
 <h1>Movies Page</h1>
@@ -78,10 +90,14 @@
     <div class="movies-container" on:scroll={handleScroll}>
         <div class="movies-grid">
             {#each filteredMovies as movie}
-                <MovieCard {movie} />
+                <MovieCard {movie} on:click={() => openModal(movie)} />
             {/each}
         </div>
     </div>
+{/if}
+
+{#if showModal}
+    <MovieModal movie={selectedMovie} on:close={closeModal} />
 {/if}
 
 <style>
