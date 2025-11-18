@@ -4,6 +4,7 @@
     import { onMount } from "svelte";
     import MovieCard from "$lib/components/MovieCard.svelte";
     import MovieModal from "$lib/components/MovieModal.svelte";
+    import { favorites } from "$lib/stores/favoriteStore";
 
     let currentUser;
     let movies = [];
@@ -14,6 +15,7 @@
     let page = 1;
     let showModal = false;
     let selectedMovie = null;
+    let favList = [];
     // movies is your fetched array from TMDb
     $: filteredMovies = movies.filter((movie) =>
         movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -21,6 +23,10 @@
 
     const unsubscribe = user.subscribe((value) => {
         currentUser = value;
+    });
+
+    favorites.subscribe((value) => {
+        favList = value;
     });
 
     onMount(async () => {
@@ -73,6 +79,15 @@
     function closeModal() {
         showModal = false;
     }
+
+    function toggleFavorite(movie) {
+        const exists = favList.find((m) => m.id === movie.id);
+        if (exists) {
+            favorites.set(favList.filter((m) => m.id !== movie.id));
+        } else {
+            favorites.set([...favList, movie]);
+        }
+    }
 </script>
 
 <h1>Movies Page</h1>
@@ -90,7 +105,12 @@
     <div class="movies-container" on:scroll={handleScroll}>
         <div class="movies-grid">
             {#each filteredMovies as movie}
-                <MovieCard {movie} on:click={() => openModal(movie)} />
+                <MovieCard 
+                    {movie} 
+                    isFavorite={favList.some(m => m.id === movie.id)}
+                    on:click={() => openModal(movie)} 
+                    on:fav={() => toggleFavorite(movie)}
+                />
             {/each}
         </div>
     </div>
