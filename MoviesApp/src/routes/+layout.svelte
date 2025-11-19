@@ -46,6 +46,7 @@
       <a href="/login">Login</a>
       <a href="/register">Register</a>
       <a href="/movies">Movies</a>
+      <a href="/favorites">Favorites</a>
     </nav>
   </header>
   
