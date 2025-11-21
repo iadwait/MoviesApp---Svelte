@@ -29,7 +29,8 @@
   
     main {
       padding: 2rem;
-      min-height: 80vh;
+      min-height: 72vh;
+      /* background-color: aqua; */
     }
   
     footer {

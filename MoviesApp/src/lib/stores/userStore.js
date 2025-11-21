@@ -1,11 +1,20 @@
 import { writable } from 'svelte/store';
+import { hasLocalStorage } from "$lib/utils";
 
-const storedUser = localStorage.getItem('user');
-export const user = writable(storedUser ? JSON.parse(storedUser) : null);
 
+let storedUser = null;
+
+if (hasLocalStorage()) {
+  const userData = localStorage.getItem('user');
+  storedUser = userData ? JSON.parse(userData) : null;
+}
+
+export const user = writable(storedUser);
 
 // userStore.js – auto-sync with localStorage
-user.subscribe(value => {
+if (hasLocalStorage()) {
+  user.subscribe(value => {
     if (value) localStorage.setItem('user', JSON.stringify(value));
     else localStorage.removeItem('user');
   });
+}

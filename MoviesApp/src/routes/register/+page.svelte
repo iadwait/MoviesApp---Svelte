@@ -1,6 +1,7 @@
 <script>
     import { goto } from "$app/navigation";
     import { user } from '$lib/stores/userStore';
+    import { hasLocalStorage } from "$lib/utils";
 
     let name = '';
     let email = '';
@@ -8,6 +9,7 @@
     let error = '';
 
     function registerUser() {
+        if (!hasLocalStorage()) return;
         // Get existing users or empty array
         const users = JSON.parse(localStorage.getItem('users')) || [];
 
